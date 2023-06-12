@@ -1,0 +1,6 @@
+services:
+  web:
+    build: .
+#    command: python bot.py
+    volumes:
+      - .:/code
