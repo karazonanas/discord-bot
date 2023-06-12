@@ -9,7 +9,7 @@ from logger import Logger
 load_dotenv()
 
 # get environment variables
-url = os.getenv("URL")
+urls = os.getenv("URLS")
 search_term = os.getenv("SEARCH_TERM")
 discord_token = os.getenv("DISCORD_TOKEN")
 server_id = os.getenv("DISCORD_SERVER_ID")
@@ -42,16 +42,19 @@ async def check_website():
     Check if the website is up and running
     :return: None
     """
-    try:
-        response = requests.get(url)
-        if response.status_code != 200:
-            await send_discord_message(f"Website {url} is down!, status code: {response.status_code},"
-                                       f" reason: {response.reason}")
-        else:
-            logger.info(f"Website {url} is up and running")
+    for url in urls.split(','):
+        logger.info(f"Checking website {url}")
+        try:
+            response = requests.get(url)
+            if response.status_code != 200:
+                await send_discord_message(f"Website {url} is down!, status code: {response.status_code},"
+                                           f" reason: {response.reason}")
+                logger.error(f"Website {url} is down!, status code: {response.status_code},")
+            else:
+                logger.info(f"Website {url} is up and running")
 
-    except Exception as e:
-        logger.error(f"Error while checking website: {str(e)}")
+        except Exception as e:
+            logger.error(f"Error while checking website: {str(e)}")
 
 
 @client.event
