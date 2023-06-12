@@ -45,7 +45,10 @@ async def check_website():
     try:
         response = requests.get(url)
         if response.status_code != 200:
-            await send_discord_message(f"Website {url} is down!, status code: {response.status_code}, reason: {response.reason}")
+            await send_discord_message(f"Website {url} is down!, status code: {response.status_code},"
+                                       f" reason: {response.reason}")
+        else:
+            logger.info(f"Website {url} is up and running")
 
     except Exception as e:
         logger.error(f"Error while checking website: {str(e)}")
@@ -60,7 +63,6 @@ async def on_ready():
     """
     logger.info(f"Logged in as {client.user.name} (ID: {client.user.id})")
     while True:
-        logger.info(f"Service alive")
         await check_website()
         await asyncio.sleep(int(os.getenv("INTERVAL")))
 
