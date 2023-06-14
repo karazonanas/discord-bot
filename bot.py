@@ -89,10 +89,6 @@ async def on_message(message):
         min = message.content.split(" ")[1]
         with open("stop.txt", "w") as f:
             f.write(min)
-
-        logger.info(f"Stopping bot for {min} minutes")
-        logger.info(f"Bot is back online")
-
     if message.content.startswith("check"):
         logger.info(f"Checking website")
         await check_website()
