@@ -14,8 +14,10 @@ search_term = os.getenv("SEARCH_TERM")
 discord_token = os.getenv("DISCORD_TOKEN")
 server_id = os.getenv("DISCORD_SERVER_ID")
 channel_id = os.getenv("DISCORD_CHANNEL_ID")
+interval = int(os.getenv("INTERVAL"))
 
 intents = discord.Intents.default()
+intents.message_content = True
 client = discord.Client(intents=intents)
 
 # ini logger
@@ -66,8 +68,33 @@ async def on_ready():
     """
     logger.info(f"Logged in as {client.user.name} (ID: {client.user.id})")
     while True:
+        sleep = 0
         await check_website()
-        await asyncio.sleep(int(os.getenv("INTERVAL")))
+        if os.path.exists("stop.txt"):
+            with open("stop.txt", "r") as f:
+                sleep = int(f.read()) * 60
+            os.remove("stop.txt")
+        logger.info(f"Sleeping for {interval + sleep} seconds")
+        await asyncio.sleep(interval + sleep)
 
+
+@client.event
+async def on_message(message):
+    """
+    This function is called when a message is sent to a channel
+    :param message: the message sent
+    :return: None
+    """
+    if message.content.startswith("stop"):
+        min = message.content.split(" ")[1]
+        with open("stop.txt", "w") as f:
+            f.write(min)
+
+        logger.info(f"Stopping bot for {min} minutes")
+        logger.info(f"Bot is back online")
+
+    if message.content.startswith("check"):
+        logger.info(f"Checking website")
+        await check_website()
 
 client.run(discord_token)
