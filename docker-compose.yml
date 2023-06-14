@@ -1,5 +1,7 @@
 services:
   web:
-    build: .
+    build:
+        context: .
+        dockerfile: Docker/Dockerfile
     volumes:
       - .:/code
