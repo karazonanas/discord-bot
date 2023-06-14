@@ -16,6 +16,7 @@ server_id = os.getenv("DISCORD_SERVER_ID")
 channel_id = os.getenv("DISCORD_CHANNEL_ID")
 interval = int(os.getenv("INTERVAL"))
 
+# ini discord client
 intents = discord.Intents.default()
 intents.message_content = True
 client = discord.Client(intents=intents)
@@ -91,6 +92,7 @@ async def on_message(message):
             f.write(min)
     if message.content.startswith("check"):
         logger.info(f"Checking website")
+        await send_discord_message("Checking website")
         await check_website()
 
 client.run(discord_token)
