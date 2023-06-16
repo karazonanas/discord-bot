@@ -8,8 +8,7 @@ This bot is a simple discord bot that monitors websites status and sends a messa
   - Permissions needed:
     - Send Messages
     - Read Messages/Voice Channels
-- Server ID where the bot will be running
-- Discord Channel ID where the messages will be sent
+  - In  https://discord.com/developers/applications/ choose your bot which you've just created and then go to `Bot -> MESSAGE CONTENT INTENT` and enable it
 
 ## How to use
 1. Clone this repository
@@ -22,9 +21,9 @@ This bot is a simple discord bot that monitors websites status and sends a messa
     INTERVAL = 
     ```
    - env variables explanation:
-     - DISCORD_TOKEN: Discord bot token
-     - DISCORD_SERVER_ID: Discord server ID where the bot will be running
-     - DISCORD_CHANNEL_ID: Discord channel ID where the messages will be sent
+     - DISCORD_TOKEN: Discord bot token (you can get it under `Bot -> TOKEN`)
+     - DISCORD_SERVER_ID: Server ID where the bot will be running (you can get it by right clicking on the server icon and clicking on `Copy ID`)
+     - DISCORD_CHANNEL_ID: Discord Channel ID where the messages will be sent (you can get it by right clicking on the channel and clicking on `Copy ID`)
      - URLS: comma separated list of urls to monitor
      - INTERVAL: interval in seconds to check the urls
 3. Run `docker-compose up -d` to start the bot
