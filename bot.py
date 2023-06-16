@@ -78,6 +78,7 @@ async def check_website(success_alert=False):
 
         except Exception as e:
             logger.error(f"Error while checking website: {str(e)}")
+            await send_alert(f"\u274C Error while checking website {url}: {str(e)}")
 
 
 @client.event
