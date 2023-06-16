@@ -40,7 +40,25 @@ async def send_discord_message(message):
         logger.error(f"Error while sending discord message: {str(e)}")
 
 
-async def check_website():
+async def send_alert(message, title="Alert", color=discord.Color.red()):
+    """
+    Send an alert to a discord channel
+    :param title: the title of the alert
+    :param message: the message to send
+    :param color: the color of the alert
+    :return: None
+    """
+    try:
+        await client.wait_until_ready()
+        server = client.get_guild(int(server_id))
+        channel = server.get_channel(int(channel_id))
+        embed = discord.Embed(title=title, description=message, color=color)
+        await channel.send(embed=embed)
+    except Exception as e:
+        logger.error(f"Error while sending discord message: {str(e)}")
+
+
+async def check_website(success_alert=False):
     """
     Check if the website is up and running
     :return: None
@@ -50,10 +68,12 @@ async def check_website():
         try:
             response = requests.get(url)
             if response.status_code != 200:
-                await send_discord_message(f"Website {url} is down!, status code: {response.status_code},"
-                                           f" reason: {response.reason}")
-                logger.error(f"Website {url} is down!, status code: {response.status_code},")
+                await send_alert(f"\u274C Website {url} is down!, status code: {response.status_code}")
+                logger.error(f"Website {url} is down!, status code: {response.status_code}")
             else:
+                if success_alert:
+                    await send_alert(f"\u2705 Website {url} is up and running", title="Success",
+                                     color=discord.Color.green())
                 logger.info(f"Website {url} is up and running")
 
         except Exception as e:
@@ -92,7 +112,6 @@ async def on_message(message):
             f.write(min)
     if message.content.startswith("check"):
         logger.info(f"Checking website")
-        await send_discord_message("Checking website")
-        await check_website()
+        await check_website(True)
 
 client.run(discord_token)
