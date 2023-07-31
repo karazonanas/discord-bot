@@ -5,3 +5,4 @@ services:
         dockerfile: Docker/Dockerfile
     volumes:
       - .:/code
+    restart: unless-stopped
